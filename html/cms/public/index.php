@@ -4,7 +4,16 @@ namespace App;
 
 use App\Controller\UsuarioController;
 
-echo "<h1>CMS</h1>";
+// Ruta de la carpeta public
+$public='/cms/public/';
+
+
+//Llamo a la cabecera
+require("../view/partials/header.php");
+
+
+// Ruta de la home
+$home='/cms/public/index.php/';
 
 // Defino la funcion que autocargara las clases cuando se instancien
 spl_autoload_register('App\autoload');
@@ -15,7 +24,8 @@ function autoload($clase, $dir = null)
 
     //Directorio raíz de mi proyecto (ruta absoluta)
     if (is_null($dir)) {
-        $dir = realpath(dirname(__FILE__));
+        $dirname = str_replace("/public",'',dirname(__FILE__));
+        $dir = realpath($dirname);
     }
 
     //Escaneo en busca de la clase de forma recursiva
@@ -30,8 +40,20 @@ function autoload($clase, $dir = null)
     }
 }
 
-// Instancio el controlador
-$controller = new UsuarioController;
+//Compruebo que ruta me estan pidiendo
+$ruta=str_replace($home,'',$_SERVER['REQUEST_URI']);
 
-// Ejecuto el metodo por defecto del controlador
-$controller->index();
+//Enruto a panel
+if($ruta =='panel'){
+
+    //Instancio el controlador
+    $controller= new UsuarioController;
+    
+    //Le mando el panel de acceso
+    $controller->acceso();
+}
+
+
+
+//Llamo a la cabecera
+require("../view/partials/footer.php");

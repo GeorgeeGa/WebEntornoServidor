@@ -9,6 +9,7 @@ class UsuarioController
 {
     
     var $db;
+    var $view;
     
     function __construct() {
         
@@ -17,8 +18,16 @@ class UsuarioController
         $dbHelper = new DbHelper();
         $this->db = $dbHelper->db;
         
+        //Instancio el view helper
+        $viewHelper = new ViewHelper();
+        $this->view =$viewHelper;
+        
     }
 
+    public function acceso(){
+        
+        $this->view->vista("acceso",null);
+    }
 
     public function index()
     {
@@ -32,11 +41,8 @@ class UsuarioController
         //Paso esa variable al constructor de usuario
         $usuario = new Usuario($data);
 
-        //Instancio el ViewHelper
-
-        $view = new ViewHelper();
-
-        $view->vista("index",$usuario);
+        // Le paso el view
+        $this->$view->vista("index",$usuario);
     }
 
 
