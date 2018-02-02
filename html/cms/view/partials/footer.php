@@ -1,12 +1,11 @@
-
-
-		<footer id="colophon" class="site-footer" role="contentinfo">
-
-			<div class="site-info">
-                            <h5> Sitio realizado por Jorge García Aguilar </h5>
-                            <h5><a> Enlace </a></h5>
-			</div><!-- .site-info -->
-		</footer><!-- #colophon -->
-        </div><!-- .page -->
-</body>
+        </div>
+</div>
+        <footer class="pie">
+            <div class="contenedor_principal">
+                <div class="info">
+                    <h5>Web creada por Jorge García Aguilar</h5>
+                </div>
+            </div>
+        </footer>
+    </body>
 </html>

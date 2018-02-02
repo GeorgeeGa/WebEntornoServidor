@@ -2,18 +2,22 @@
 
 namespace App;
 
+session_start();
+
 use App\Controller\UsuarioController;
 
 // Ruta de la carpeta public
 $public='/cms/public/';
 
-
 //Llamo a la cabecera
 require("../view/partials/header.php");
 
-
 // Ruta de la home
 $home='/cms/public/index.php/';
+
+//La guardo a la sesión.
+$_SESSION['home'] = $home;
+
 
 // Defino la funcion que autocargara las clases cuando se instancien
 spl_autoload_register('App\autoload');
@@ -43,17 +47,31 @@ function autoload($clase, $dir = null)
 //Compruebo que ruta me estan pidiendo
 $ruta=str_replace($home,'',$_SERVER['REQUEST_URI']);
 
-//Enruto a panel
-if($ruta =='panel'){
-
-    //Instancio el controlador
-    $controller= new UsuarioController;
+//Enrutaminetos
+switch ($ruta){
     
-    //Le mando el panel de acceso
-    $controller->acceso();
+    //Panel
+    case 'panel':
+        //Instancio el controlador
+        $controller= new UsuarioController;
+        //Le mando el panel de acceso
+        $controller->acceso();
+        break;
+    
+    case 'panel/salir':
+        //Instancio el controlador
+        $controller= new UsuarioController;
+        //Le mando al método salir
+        $controller->salir();
+        break;
+    
+    case 'panel/usuarios':
+        //Instancio el controlador
+        $controller= new UsuarioController;
+        //Le mando al método salir
+        $controller->index();
+        break;
 }
-
-
 
 //Llamo a la cabecera
 require("../view/partials/footer.php");
