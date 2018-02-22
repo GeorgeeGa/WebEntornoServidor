@@ -4,7 +4,10 @@ namespace App;
 
 session_start();
 
+use App\Controller\AppController;
 use App\Controller\UsuarioController;
+use App\Controller\NoticiaController;
+
 
 // Ruta de la carpeta public
 $public='/cms/public/';
@@ -106,7 +109,14 @@ function ruta2($array_ruta){
 // Array de la ruta.
 $array_ruta= explode('/', $ruta);
 
-if (count($array_ruta)== 4){
+if (count($array_ruta) == 2 AND $array_ruta[0] == "noticiaHome"){    
+            //Instancio el controlador
+                $controller= new AppController;
+            //Inicializo el id para mostrar la noticia que queremos
+                $id = $array_ruta[1];
+            //Le mando al método salir
+                $controller->noticiaHome($id);     
+}else if (count($array_ruta) == 4){
     
     if($array_ruta[0].$array_ruta[1] == "panelusuarios"){
         if($array_ruta[2] == "editar" OR
@@ -119,7 +129,7 @@ if (count($array_ruta)== 4){
                 //Llamo a la accion
                 $controller->$accion($id);
            }else{ 
-                $controller= new UsuarioController;
+                $controller= new AppController; //Hay que cambiarlo a AppController
                 $controller->index();    
            }
        
@@ -135,19 +145,19 @@ if (count($array_ruta)== 4){
                 //Llamo a la accion
                 $controller->$accion($id);
            }else{ 
-                $controller= new NoticiaController;
+                $controller= new AppController; //Hay que cambiarlo a AppController
                 $controller->index();    
            }
     
     }else{
         //Instancio el controlador
-           $controller= new AppController;
+           $controller= new AppController; ///Hay que cambiarlo a AppController
         //Le mando el panel de acceso
-           $controller->acceso();
+           $controller->index();
     }
     
      
-}else{
+} else{
 
     //Enrutaminetos
     switch ($ruta){
@@ -185,7 +195,7 @@ if (count($array_ruta)== 4){
             //Instancio el controlador
                 $controller= new NoticiaController;
             //Le mando al método salir
-                $controller->crear();
+                $controller->index();
                 break;
         case 'panel/noticias/crear':
             //Instancio el controlador
@@ -193,14 +203,25 @@ if (count($array_ruta)== 4){
             //Le mando al método salir
                 $controller->crear();
                 break;
-        default : //Instancio el controlador
+        case 'noticiasHome':
+            //Instancio el controlador
                 $controller= new AppController;
             //Le mando al método salir
-                $controller->index();
+                $controller->noticiasHome();
+                break;
+        case 'contacto':
+            //Instancio el controlador
+                $controller= new AppController;
+            //Le mando al método salir
+                $controller->contacto();
+                break;
+        default : //Instancio el controlador
+            $controller= new AppController;
+            //Le mando al método salir
+            $controller->index();
     }
 }
 
 
-
 //Llamo a la cabecera
-require("../view/partials/footer.php");
+require("../view/partials/footerPanel.php");

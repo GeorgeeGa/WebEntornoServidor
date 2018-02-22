@@ -1,9 +1,6 @@
 <div class="panel">
     <div class="contenedor_principal">
         <div class="titulo_panel">
-            <div class="logo">
-            
-            </div>
             <div>
                 <h1>Cms de <span><?php echo $_SESSION['usuario'] ?></span></h1>
             </div>
@@ -14,9 +11,10 @@
                     <a href="<?php echo $_SESSION['home'] ?>panel"><li>Inicio</li></a>
                 </ul>
                 <ul>
-                    <a href=""><li>Noticias</li></a>
+                    <a href="<?php echo $_SESSION['home'] ?>panel/noticias"><li>Noticias</li></a>
                 </ul>
-                <ul>
+                <!-- Mostrar usuarios o no... -->
+                <ul class="<?php echo ($_SESSION['usuarios']) ? '' : 'displayOff' ?>">
                     <a href="<?php echo $_SESSION['home'] ?>panel/usuarios"><li>Usuarios</li></a>
                 </ul>
                 <ul>

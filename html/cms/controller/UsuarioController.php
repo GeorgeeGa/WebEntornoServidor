@@ -64,11 +64,12 @@ class UsuarioController {
 
         //Asigno la consulta a una variable
         $data = $resultado->fetch(\PDO::FETCH_OBJ);
-        //Compruebo contraseña
+        //Compruebo contraseña y si esta activo
 
-        if ($data AND hash_equals($data->clave, crypt($clave, $data->clave))) {
+        if ($data AND hash_equals($data->clave, crypt($clave, $data->clave)) AND ($data->activo == 1)) {
             // Añado el nombre de usuario a la sesión.
             $_SESSION['usuario'] = $data->usuario;
+            $_SESSION['usuarios'] = $data->usuarios;
             return 1;
         } else {
             return 0;
@@ -80,6 +81,7 @@ class UsuarioController {
 
     public function index() {
 
+        $this->permisos();
         //Select con OBJ
         $resultado = $this->db->query('SELECT * FROM usuarios');
 
@@ -97,6 +99,7 @@ class UsuarioController {
 
         //Borro el nombre de usuario a la sesión.
         $_SESSION['usuario'] = "";
+        $_SESSION['usuarios'] = "";
 
         // Le redirijo al panel
         header("Location: " . $_SESSION['home'] . "panel");
@@ -104,9 +107,10 @@ class UsuarioController {
     }
 
     public function crear() {
-
+        
+        $this->permisos();
         //Create elemento
-        $nombre = "Nuevo Usuario" . rand(1, 1000);
+        $nombre = "Nuevo usuario" . rand(1, 1000);
         $registros = $this->db->exec('INSERT INTO usuarios (usuario) VALUES ("' . $nombre . '")');
         if ($registros) {
             $mensaje [] = ['tipo' => 'success',
@@ -125,7 +129,8 @@ class UsuarioController {
     }
 
     function activar($id) {
-
+        
+        $this->permisos();
         if ($id) {
             $registros = $this->db->exec("UPDATE usuarios SET activo=1 WHERE id=" . $id . "");
             //Mensajes
@@ -151,7 +156,8 @@ class UsuarioController {
     }
 
     function desactivar($id) {
-
+        
+        $this->permisos();
         if ($id) {
             $registros = $this->db->exec("UPDATE usuarios SET activo=0 WHERE id=" . $id . "");
             //Mensajes
@@ -177,7 +183,8 @@ class UsuarioController {
     }
 
     function borrar($id) {
-
+        
+        $this->permisos();
         if ($id) {
             $registros = $this->db->exec("DELETE from usuarios WHERE id=" . $id . "");
             //Mensajes
@@ -203,17 +210,22 @@ class UsuarioController {
     }
 
     function editar($id) {
-
+        
+        $this->permisos();
+        
         if ($id) {
             if (isset($_POST['guardar']) AND $_POST['guardar'] == "Guardar") {
 
                 $usuario = filter_input(INPUT_POST, 'usuario', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $clave = crypt(filter_input(INPUT_POST, 'clave', FILTER_SANITIZE_FULL_SPECIAL_CHARS),"jorge");
                 $usuarios = (filter_input(INPUT_POST, 'usuarios', FILTER_SANITIZE_STRING)== 'on') ? 1 : 0;
                 $noticias = (filter_input(INPUT_POST, 'noticias', FILTER_SANITIZE_STRING)== 'on') ? 1 : 0;
+                
                 
                 //Guardo en la base de datos.
                 $this->db->beginTransaction();
                 $this->db->exec('UPDATE usuarios SET usuario="'.$usuario.'" WHERE id='.$id.'');
+                $this->db->exec('UPDATE usuarios SET clave="'.$clave.'" WHERE id='.$id.'');
                 $this->db->exec('UPDATE usuarios SET usuarios="'.$usuarios.'" WHERE id='.$id.'');
                 $this->db->exec('UPDATE usuarios SET noticias="'.$noticias.'" WHERE id='.$id.'');
                 $this->db->commit();
@@ -255,6 +267,17 @@ class UsuarioController {
 
             // Le redirijo al panel
             header("Location: " . $_SESSION['home'] . "panel/usuarios");
+        }
+    }
+    
+    function permisos(){
+        if(!isset($_SESSION['usuarios']) || $_SESSION['usuarios'] != 1){
+            $mensaje[] = ['tipo' => 'warning',
+                'texto' => "Usuario no autorizado"
+            ];
+            $_SESSION['mensajes'] = $mensaje;
+            //Le redirijo al panel
+            header("Location: " . $_SESSION['home'] . "panel");
         }
     }
 

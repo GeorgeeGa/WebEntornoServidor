@@ -7,8 +7,8 @@ require("../view/partials/navegadorPanel.php");
 ?>
     <div class="contenido_panel">
         <ul class="panel_titulo">
-            <li class="panel_datosIzq"><h5>Usuarios</h5></li>
-            <li class="panel_datosIzq"><a href="<?php echo $_SESSION['home'] ?>panel/usuarios/crear">Añadir Usuario</a></li>
+            <li class="panel_datosIzq"><h5>Usuarios</h5> <a href="<?php echo $_SESSION['home'] ?>panel/usuarios/crear">Añadir Usuario</a></li>
+            <li class="panel_datosIzq"></li>
             <li class="panel_datosDer"><h5>Acciones</h5></li>
         </ul>    
         <?php foreach ($datos as $dato){ ?>

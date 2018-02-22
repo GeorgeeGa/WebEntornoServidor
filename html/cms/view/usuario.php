@@ -13,17 +13,16 @@ require("../view/partials/navegadorPanel.php");
         <div class="contenedor"
             <p> Edita los datos de usuario que desees.</p>
             <form class="panel_usuarios panel_datosIzq" method="POST" action="">
-                <input type="hidden" name="key" value="<?php echo $datos->id ?>">
-                <div><p class="enLinea">Usuario:</p><input class="usuario"type="text" name="usuario" value="<?php echo $datos->usuario ?>"></div>
-                <div><p class="enLinea"> Marca para cambiar la clave.</p><input type="checkbox" name="cambiar_clave"></div>
-                <div><p class="enLinea">Clave:</p><input class="clave"type="password" name="clave" value=""></div>
+                <div><p class="enLinea">Usuario:</p><input class="usuario"type="text" name="usuario" value="<?php echo $datos->usuario ?> " autocomplete="off"></div>
+                <div><p class="enLinea"> Marca para cambiar la clave.</p><input class="permisos" type="checkbox" name="cambiar_clave"></div>
+                <div><p class="enLineaEspecial">Clave:</p><input class="clave" type="password" name="clave" value=""></div>
                 <div><p>Permisos:</p></div>
                 <?php $usuarios = ($datos->usuarios ==1) ? 'checked' : '' ?>
-                Usuarios <input class="enLinea" type="checkbox" name="usuarios" <?php echo $usuarios ?> >
+                Usuarios <input class="permisos" type="checkbox" name="usuarios" <?php echo $usuarios ?> >
                 <?php $noticias = ($datos->noticias ==1) ? 'checked' : '' ?>
-                Noticias <input type="checkbox" name="noticias" <?php echo $noticias ?>><br>
-                <div><a href="<?php echo $_SESSION['home'] ?>panel/usuarios"><input  class="guardar" type="button" name="volver" value="Volver"></a></div>
-                <div><input class="guardar" type="submit" name="guardar" value="Guardar"></div>
+                Noticias <input class="permisos" type="checkbox" name="noticias" <?php echo $noticias ?>><br>
+                <div class="marginTop"><a href="<?php echo $_SESSION['home'] ?>panel/usuarios"><input  class="guardar" type="button" name="volver" value="Volver"></a>
+                <input class="guardar" type="submit" name="guardar" value="Guardar"></div>
             </form>  
         </div>
     </div>
