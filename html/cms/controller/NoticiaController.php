@@ -29,10 +29,11 @@ class NoticiaController {
 
         //Select con OBJ
         $resultado = $this->db->query('SELECT * FROM noticias');
-
+        
+        $noticias=[];
         //Asigno la consulta a una variable
         while ($data = $resultado->fetch(\PDO::FETCH_OBJ)) {
-
+            
             //Paso esa variable al constructor de usuario
             $noticias [] = new Noticia ($data);
         }
@@ -43,7 +44,7 @@ class NoticiaController {
     public function crear() {
 
         //Create elemento
-        $titulo = "Nueva noticia" . rand(1, 1000);
+        $titulo = "Nuevo Evento " . rand(1, 1000);
         $registros = $this->db->exec('INSERT INTO noticias (titulo) VALUES ("' . $titulo . '")');
         if ($registros) {
             $mensaje [] = ['tipo' => 'success',
@@ -180,11 +181,30 @@ class NoticiaController {
                 # Le añadimos la marca de tiempo
                 $slug = $slug.date("i-s");
                 
-                //var_dump($slug);
+               
                 $entradilla = filter_input(INPUT_POST, 'entradilla', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $texto = filter_input(INPUT_POST, 'texto', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                 $borrado = (filter_input(INPUT_POST, 'borrado', FILTER_SANITIZE_STRING)== 'on') ? 1 : 0;
                 $home = (filter_input(INPUT_POST, 'home', FILTER_SANITIZE_STRING)== 'on') ? 1 : 0;
+                
+                // Subida de archivos
+                $archivo_recibido = $_FILES['archivo'];
+                $directorio_subida = '../public/img/subidas/';
+                $imagenURL = '/cms/public/img/subidas/' . basename($archivo_recibido['name']);
+                $archivo_subido = $directorio_subida . basename($archivo_recibido['name']);
+                $tipoArchivo= $archivo_recibido['type'];
+                
+                
+                if (!((strpos($tipoArchivo, "png") || strpos($tipoArchivo, "jpeg")))) { 
+                    echo "La extensión no es correcta. Se permiten archivos .png o .jpg."; 
+                        }else{ 
+                                if (is_uploaded_file($archivo_recibido['tmp_name']) AND 
+                        move_uploaded_file($archivo_recibido['tmp_name'], $archivo_subido)) {
+                            echo "El fichero es válido y se subió con éxito.\n";
+                                } else {
+                                        echo "¡Posible ataque de subida de ficheros!\n";
+                                }
+                        }      
                 
                 //Guardo en la base de datos.
                 $this->db->beginTransaction();
@@ -193,9 +213,29 @@ class NoticiaController {
                 $this->db->exec('UPDATE noticias SET slug="'.$slug.'" WHERE id='.$id.'');
                 $this->db->exec('UPDATE noticias SET entradilla="'.$entradilla.'" WHERE id='.$id.'');
                 $this->db->exec('UPDATE noticias SET texto="'.$texto.'" WHERE id='.$id.'');
-                $this->db->exec('UPDATE noticias SET borrado="'.$borrado.'" WHERE id='.$id.'');
+                if(isset($_POST['checkImagen'])){ 
+                $this->db->exec('UPDATE noticias SET imagenURL="'.$imagenURL.'" WHERE id='.$id.'');
+                };
                 $this->db->exec('UPDATE noticias SET home="'.$home.'" WHERE id='.$id.'');
                 $this->db->commit();
+                
+                // Subida de archivos
+                $archivo_recibido = $_FILES['archivo'];
+                $directorio_subida = '../public/img/subidas/';
+                $archivo_subido = $directorio_subida . basename($archivo_recibido['name']);
+                $tipoArchivo= $archivo_recibido['type'];
+                
+                
+                if (!((strpos($tipoArchivo, "png") || strpos($tipoArchivo, "jpeg")))) { 
+                    echo "La extensión no es correcta. Se permiten archivos .png o .jpg."; 
+                        }else{ 
+                                if (is_uploaded_file($archivo_recibido['tmp_name']) AND 
+                        move_uploaded_file($archivo_recibido['tmp_name'], $archivo_subido)) {
+                            echo "El fichero es válido y se subió con éxito.\n";
+                                } else {
+                                        echo "¡Posible ataque de subida de ficheros!\n";
+                                }
+                        }
                 
                 $mensaje [] = ['tipo' => 'success',
                     'texto' => "La Noticia $titulo se ha editado correctamente."

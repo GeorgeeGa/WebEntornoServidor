@@ -225,7 +225,10 @@ class UsuarioController {
                 //Guardo en la base de datos.
                 $this->db->beginTransaction();
                 $this->db->exec('UPDATE usuarios SET usuario="'.$usuario.'" WHERE id='.$id.'');
+                //Comprobamos si esta el checkClave seteado para realizar un cambio en la base de datos o no.
+                if(isset($_POST['checkClave'])){
                 $this->db->exec('UPDATE usuarios SET clave="'.$clave.'" WHERE id='.$id.'');
+                };
                 $this->db->exec('UPDATE usuarios SET usuarios="'.$usuarios.'" WHERE id='.$id.'');
                 $this->db->exec('UPDATE usuarios SET noticias="'.$noticias.'" WHERE id='.$id.'');
                 $this->db->commit();

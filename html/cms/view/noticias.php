@@ -7,7 +7,7 @@ require("../view/partials/navegadorPanel.php");
 ?>
     <div class="contenido_panel">
         <ul class="panel_titulo">
-            <li class="panel_datosIzq"><h5>Noticias</h5> <a href="<?php echo $_SESSION['home'] ?>panel/noticias/crear">Añadir Noticia</a> </li>
+            <li class="panel_datosIzq"><h5>Eventos</h5> <a href="<?php echo $_SESSION['home'] ?>panel/noticias/crear">Añadir Evento</a> </li>
             <li class="panel_datosDer"><h5>Acciones</h5></li>
             <li class="panel_datosDer"><h5>Fecha de Alta</h5></li>
             <li class="panel_datosDer"><h5>Autor</h5></li>
@@ -15,14 +15,15 @@ require("../view/partials/navegadorPanel.php");
         <?php foreach ($datos as $dato){ ?>
         <ul class="panel_datos">
                 <li class="panel_noticias panel_datosIzq">
-                    <a href="">
+                    <?php $ruta = $_SESSION['home'] . "panel/noticias/editar/" . $dato->id ?>
+                    <a href="<?php echo $ruta ?>">
                         <?php echo $dato->titulo ?>
                     </a>
                 </li>
                 <li class="panel_noticias panel_datosIzq">
-                    <a href="">
+                    <p>
                         <?php echo $dato->autor ?>
-                    </a>
+                    </p>
                 </li>
                 <li class="panel_acciones_noticias panel_datosDer">
                     <?php $ruta = $_SESSION['home'] . "panel/noticias/editar/" . $dato->id ?>

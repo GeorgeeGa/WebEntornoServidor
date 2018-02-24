@@ -14,7 +14,7 @@ class Noticia
     var $fecha_pub;
     var $activo;
     var $autor;
-    var $borrado;
+    var $imagenURL;
     var $home;
 
     //Metodo constructor nuevo
@@ -30,7 +30,7 @@ class Noticia
         $this->fecha_pub = $data->fecha_pub;
         $this->activo = $data->activo;
         $this->autor = $data->autor;
-        $this->borrado = $data->borrado;
+        $this->imagenURL = $data->imagenURL;
         $this->home = $data ->home; 
     }
 

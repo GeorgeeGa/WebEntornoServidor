@@ -28,14 +28,17 @@ class AppController {
     public function index() {
 
         //Select con OBJ
-        $resultado = $this->db->query("SELECT * FROM noticias WHERE home='1' LIMIT 5");
+        $resultado = $this->db->query("SELECT * FROM noticias WHERE home='1' AND activo='1' LIMIT 5");
 
+        // Inicializamos $noticias a 0 para que no de error si no hay noticias en la home.
+        $noticias=[];
         //Asigno la consulta a una variable
         while ($data = $resultado->fetch(\PDO::FETCH_OBJ)) {
-
+            
             //Paso esa variable al constructor de usuario
             $noticias [] = new Noticia ($data);
         }
+        
         // Le paso el view
         $this->view->vista('home', $noticias);
     }
@@ -43,8 +46,9 @@ class AppController {
     public function noticiasHome() {
 
         //Select con OBJ
-        $resultado = $this->db->query('SELECT * FROM noticias');
+        $resultado = $this->db->query(" SELECT * FROM noticias WHERE activo='1' ");
 
+        $noticias=[];
         //Asigno la consulta a una variable
         while ($data = $resultado->fetch(\PDO::FETCH_OBJ)) {
 
@@ -55,10 +59,10 @@ class AppController {
         $this->view->vista('noticiasHome', $noticias);
     }
     
-    public function noticiaHome($id) {
+    public function noticiaHome($slug) {
 
         //Select con OBJ
-        $resultado = $this->db->query("SELECT * FROM noticias WHERE id=" . $id . " LIMIT 1");
+        $resultado = $this->db->query("SELECT * FROM noticias WHERE slug='" . $slug . "' LIMIT 1");
 
         //Asigno la consulta a una variable
         while ($data = $resultado->fetch(\PDO::FETCH_OBJ)) {

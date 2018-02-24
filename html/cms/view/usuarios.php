@@ -14,7 +14,8 @@ require("../view/partials/navegadorPanel.php");
         <?php foreach ($datos as $dato){ ?>
         <ul class="panel_datos">
                 <li class="panel_usuarios panel_datosIzq">
-                    <a href="">
+                    <?php $ruta = $_SESSION['home'] . "panel/usuarios/editar/" . $dato->id ?>
+                    <a href="<?php echo $ruta ?>">
                         <?php echo $dato->usuario ?>
                     </a>    
                 </li>
